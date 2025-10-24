@@ -2,6 +2,7 @@
 
 import pytest
 
+from jira_zephyr_mcp import logging as logging_module
 from jira_zephyr_mcp.logging import redact_sensitive_data, redact_processor
 
 
@@ -84,3 +85,16 @@ class TestRedaction:
         assert result["status_code"] == 200
         assert result["attempt"] == 1
         assert result["success"] is True
+
+
+class TestSetupLogging:
+    """Tests for structured logging setup."""
+
+    def test_setup_logging_requires_structlog(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """setup_logging should raise a helpful error when structlog is unavailable."""
+        monkeypatch.setattr(logging_module, "_STRUCTLOG", None, raising=False)
+
+        with pytest.raises(RuntimeError) as exc_info:
+            logging_module.setup_logging()
+
+        assert "structlog is required" in str(exc_info.value)
