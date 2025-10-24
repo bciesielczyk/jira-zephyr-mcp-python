@@ -3,7 +3,7 @@
 ## Action Plan & TODOs
 
 - [X] **Set scope & requirements**: document security objectives, feature parity targets, supported MCP tools, performance/SLA expectations, and compliance constraints.
-- [ ] **Create Python scaffold**: initialize `pyproject.toml`, configure virtual environment layout, create package skeleton under `src/jira_zephyr_mcp`, wire linting/formatting (`ruff`), typing (`mypy`/`pyright`), testing (`pytest`), and a CLI entry point via `typer` or `click`.
+- [X] **Create Python scaffold**: initialize `pyproject.toml`, configure virtual environment layout, create package skeleton under `src/jira_zephyr_mcp`, wire linting/formatting (`ruff`), typing (`mypy`/`pyright`), testing (`pytest`), and a CLI entry point via `typer` or `click`.
 - [ ] **Implement configuration layer**: load environment variables and secret stores with `pydantic` models, define validation rules, support multiple config sources, and write unit tests.
 - [ ] **Port Jira & Zephyr clients**: recreate REST integrations using `httpx` (async), add retry/backoff policies, structured logging with redaction, timeout defaults, and response schema validation.
 - [ ] **Rebuild MCP tool handlers**: translate each TypeScript tool (`test_cases`, `test_plans`, `test_cycles`, `test_execution`, `jira_issues`, `nl_command`) into Python modules, ensure consistent error handling, and add security checks for input validation.

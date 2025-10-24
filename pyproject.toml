@@ -8,9 +8,6 @@ dependencies = [
     "typer>=0.12",
 ]
 
-[project.scripts]
-jira-zephyr-mcp = "jira_zephyr_mcp.cli:main"
-
 [tool.uv]
 dev-dependencies = [
     "mypy>=1.18.2",
