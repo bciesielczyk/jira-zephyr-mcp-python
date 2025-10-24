@@ -1,0 +1,21 @@
+[project]
+name = "jira-zephyr-mcp-python"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "typer>=0.12",
+]
+
+[project.scripts]
+jira-zephyr-mcp = "jira_zephyr_mcp.cli:main"
+
+[tool.uv]
+dev-dependencies = [
+    "mypy>=1.18.2",
+    "pyright>=1.1.406",
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+    "ruff>=0.14.2",
+]
