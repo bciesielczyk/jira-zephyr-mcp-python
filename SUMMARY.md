@@ -76,3 +76,42 @@ Implemented structured logging using `structlog` with automatic sensitive data r
 **Commit:** `1f4dd0d`
 
 **Next:** Add individual client methods (get_issue, search_issues, etc.)
+
+---
+
+### Step 4: Implemented MCP Server ✅
+
+Created a fully functional MCP server that integrates with Jira and Zephyr clients:
+
+**Files Created/Modified:**
+- `src/jira_zephyr_mcp/server.py` - Main MCP server class
+- `src/jira_zephyr_mcp/clients/jira.py` - Added `get_issue()` method
+- `src/jira_zephyr_mcp/cli.py` - Updated `serve` command to run MCP server
+- `pyproject.toml` - Added `mcp>=1.19.0` dependency
+
+**Features:**
+- **MCP Server**: Built on official MCP Python SDK
+- **Tool handlers**: 
+  - `health_check`: Verify server and API connectivity status
+  - `read_jira_issue`: Retrieve Jira issue details with optional field filtering
+- **Client management**: Lazy initialization of Jira/Zephyr clients
+- **Error handling**: Comprehensive error responses with proper MCP format
+- **Configuration integration**: Uses environment-based Settings loading
+
+**Jira Client Methods:**
+- `get_issue(issue_key, fields, expand)`: Fetch issue with retry logic and error handling
+
+**Type Safety:** All code typed and passes mypy strict mode ✅
+
+**Tests:** All 28 existing tests passing ✅
+
+**Dependencies added:** `mcp>=1.19.0` (+ transitive deps: starlette, uvicorn, etc.)
+
+**Commit:** `715bc95`
+
+**CLI Usage:**
+```bash
+jira-zephyr-mcp serve  # Run MCP server on stdio
+```
+
+**Next:** Add more Jira/Zephyr methods one-by-one
