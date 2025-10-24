@@ -16,12 +16,15 @@ def version() -> None:
 
 
 @app.command()
-def serve(  # pragma: no cover - placeholder until server is implemented
-    host: str = typer.Option("127.0.0.1", help="Host interface for the MCP server."),
-    port: int = typer.Option(8765, help="Port for the MCP server."),
-) -> None:
-    """Start the MCP server (placeholder)."""
-    typer.echo(f"MCP server bootstrap not yet implemented. Would bind to {host}:{port} when ready.")
+def serve() -> None:
+    """Start the MCP server."""
+    import asyncio
+    from jira_zephyr_mcp.config import load_config
+    from jira_zephyr_mcp.server import JiraZephyrMCPServer
+    
+    settings = load_config()
+    mcp_server = JiraZephyrMCPServer(settings)
+    asyncio.run(mcp_server.run())
 
 
 def main() -> None:

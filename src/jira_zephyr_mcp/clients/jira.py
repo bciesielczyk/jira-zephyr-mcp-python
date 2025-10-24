@@ -94,6 +94,41 @@ class JiraClient:
             await self._client.aclose()
             self._client = None
 
+    async def get_issue(
+        self,
+        issue_key: str,
+        fields: Optional[list[str]] = None,
+        expand: Optional[list[str]] = None,
+    ) -> dict[str, Any]:
+        """
+        Retrieve issue details.
+
+        Args:
+            issue_key: Issue key (e.g., 'PROJ-123')
+            fields: Optional list of specific fields to retrieve
+            expand: Optional list of fields to expand
+
+        Returns:
+            Issue data as dictionary
+
+        Raises:
+            JiraAuthError: Authentication failed
+            JiraNotFoundError: Issue not found
+            JiraRateLimitError: Rate limit exceeded
+            JiraClientError: Other API errors
+        """
+        url = f"/rest/api/3/issue/{issue_key}"
+        params = {}
+
+        if fields:
+            params["fields"] = ",".join(fields)
+        if expand:
+            params["expand"] = ",".join(expand)
+
+        response = await self._make_request("GET", url, params=params)
+        data: dict[str, Any] = response.json()
+        return data
+
     async def _make_request(
         self,
         method: str,

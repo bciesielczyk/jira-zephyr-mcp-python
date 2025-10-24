@@ -12,6 +12,7 @@ dependencies = [
     "httpx>=0.25.0",
     "tenacity>=8.2.0",
     "structlog>=24.1.0",
+    "mcp>=1.19.0",
 ]
 
 [tool.uv]
