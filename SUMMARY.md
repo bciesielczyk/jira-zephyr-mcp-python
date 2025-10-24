@@ -45,3 +45,34 @@ Implemented retry logic with exponential backoff using the `tenacity` library:
 **Type Safety:** All functions fully typed and pass mypy strict mode ✅
 
 **Next:** Add individual client methods (get_issue, search_issues, etc.)
+
+---
+
+### Step 3: Added Structured Logging with PII Redaction ✅
+
+Implemented structured logging using `structlog` with automatic sensitive data redaction:
+
+**Files Created:**
+- `src/jira_zephyr_mcp/logging.py` - Main logging setup with redaction processor
+- `src/jira_zephyr_mcp/utils/logging.py` - Logging helper functions
+- `tests/unit/test_logging.py` - 9 comprehensive redaction tests
+
+**Features:**
+- **Structured JSON logs**: Timestamp, level, context, and custom fields
+- **PII Redaction**: Automatic redaction of:
+  - API tokens, passwords, bearer/basic auth tokens
+  - Email addresses
+  - Sensitive values in nested dictionaries
+- **Regex-based patterns**: Case-insensitive matching for common credential patterns
+- **Logging helpers**: `log_request()`, `log_response()`, `log_error()`, `log_retry()` 
+- **Processor chain**: Redaction → TimeStamper → JSONRenderer
+
+**Type Safety:** All functions typed and pass mypy strict mode ✅
+
+**Tests:** 9 tests covering redaction patterns and processor behavior - all passing ✅
+
+**Dependency added:** `structlog>=24.1.0`
+
+**Commit:** `1f4dd0d`
+
+**Next:** Add individual client methods (get_issue, search_issues, etc.)
