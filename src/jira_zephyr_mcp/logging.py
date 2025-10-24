@@ -1,10 +1,15 @@
-"""Structured logging setup with PII redaction."""
+"""Structured logging helpers with redaction support."""
+
+from __future__ import annotations
 
 import logging
 import re
 from typing import Any
 
-import structlog
+try:  # pragma: no cover - import is environment dependent
+    import structlog as _STRUCTLOG
+except ModuleNotFoundError:  # pragma: no cover - exercised when dependency missing
+    _STRUCTLOG = None  # type: ignore[assignment]
 
 
 # Sensitive patterns to redact
@@ -18,22 +23,22 @@ SENSITIVE_PATTERNS = [
 ]
 
 
-def redact_sensitive_data(text: str) -> str:
+def redact_sensitive_data(value: Any) -> Any:
     """
     Redact sensitive information from log messages.
     
     Args:
-        text: Text to redact
+        value: Text or structured data to redact
         
     Returns:
-        Redacted text
+        Redacted value
     """
-    if not isinstance(text, str):
-        return text
-    
+    if not isinstance(value, str):
+        return value
+
     for pattern, replacement in SENSITIVE_PATTERNS:
-        text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
-    return text
+        value = re.sub(pattern, replacement, value, flags=re.IGNORECASE)
+    return value
 
 
 def redact_processor(logger: Any, method_name: str, event_dict: dict[str, Any]) -> dict[str, Any]:
@@ -66,15 +71,20 @@ def setup_logging(log_level: str = "INFO") -> None:
     Args:
         log_level: Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
     """
+    structlog_module = _STRUCTLOG
+    if structlog_module is None:
+        msg = "structlog is required to configure structured logging. Install the 'structlog' package."
+        raise RuntimeError(msg)
+
     # Note: structlog.processors signature doesn't fully align with strict typing
-    structlog.configure(
+    structlog_module.configure(
         processors=[
             redact_processor,  # type: ignore[list-item]
-            structlog.processors.TimeStamper(fmt="iso"),
-            structlog.processors.JSONRenderer(),
+            structlog_module.processors.TimeStamper(fmt="iso"),
+            structlog_module.processors.JSONRenderer(),
         ],
         context_class=dict,
-        logger_factory=structlog.PrintLoggerFactory(),
+        logger_factory=structlog_module.PrintLoggerFactory(),
         cache_logger_on_first_use=False,
     )
     
